@@ -8,9 +8,24 @@ function App() {
 
   useEffect(() => {
     fetch('/api/superheroes')
-      .then((response) => response.json())
-      .then((data) => setSuperheroes(data))
-      .catch((error) => console.error('Error fetching superheroes:', error));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Ensure data is an array
+        if (Array.isArray(data)) {
+          setSuperheroes(data);
+        } else {
+          setSuperheroes([]);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching superheroes:', error);
+        setSuperheroes([]); // Set empty array on error
+      });
   }, []);
 
   const handleHeroSelection = (hero) => {
@@ -43,15 +58,25 @@ function App() {
     setSelectedHeroes([]);
   };
 
+  const getSafeStat = (hero, stat) => {
+    if (!hero.powerstats || hero.powerstats[stat] === null || hero.powerstats[stat] === undefined) {
+      return 0;
+    }
+    const value = parseInt(hero.powerstats[stat]);
+    return isNaN(value) ? 0 : value;
+  };
+
   const calculateWinner = (hero1, hero2) => {
     const stats = ['intelligence', 'strength', 'speed', 'durability', 'power', 'combat'];
     let hero1Score = 0;
     let hero2Score = 0;
     
     stats.forEach(stat => {
-      if (hero1.powerstats[stat] > hero2.powerstats[stat]) {
+      const stat1 = getSafeStat(hero1, stat);
+      const stat2 = getSafeStat(hero2, stat);
+      if (stat1 > stat2) {
         hero1Score++;
-      } else if (hero2.powerstats[stat] > hero1.powerstats[stat]) {
+      } else if (stat2 > stat1) {
         hero2Score++;
       }
     });
@@ -97,8 +122,8 @@ function App() {
 
         <div className="stats-comparison">
           {stats.map(stat => {
-            const stat1 = hero1.powerstats[stat];
-            const stat2 = hero2.powerstats[stat];
+            const stat1 = getSafeStat(hero1, stat);
+            const stat2 = getSafeStat(hero2, stat);
             const winner = stat1 > stat2 ? 'hero1' : stat1 < stat2 ? 'hero2' : 'tie';
             
             return (
@@ -185,12 +210,12 @@ function App() {
               <td>{hero.id}</td>
               <td>{hero.name}</td>
               <td><img src={hero.image} alt={hero.name} width="50" /></td>
-              <td>{hero.powerstats.intelligence}</td>
-              <td>{hero.powerstats.strength}</td>
-              <td>{hero.powerstats.speed}</td>
-              <td>{hero.powerstats.durability}</td>
-              <td>{hero.powerstats.power}</td>
-              <td>{hero.powerstats.combat}</td>
+              <td>{getSafeStat(hero, 'intelligence')}</td>
+              <td>{getSafeStat(hero, 'strength')}</td>
+              <td>{getSafeStat(hero, 'speed')}</td>
+              <td>{getSafeStat(hero, 'durability')}</td>
+              <td>{getSafeStat(hero, 'power')}</td>
+              <td>{getSafeStat(hero, 'combat')}</td>
             </tr>
           ))}
         </tbody>
