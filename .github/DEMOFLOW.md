@@ -4,6 +4,11 @@ We can do 07 - will work in background and end there
 We can do 08+09 in parallel to 10-BE for the backend
 Then we do 10-FE and use Playwright as TDD for the change
 Meanwhile we do in BE 11+12 - API sec review + Code Review
+- Do steps 10FE and 10BE
+- Do step 12
+- Do step 13
+- Do step 14 - show and tell only
+- Think if to show the code review in GH.com
 - Update Mermaid and numbering and parallel in mermaid
 - 
 
