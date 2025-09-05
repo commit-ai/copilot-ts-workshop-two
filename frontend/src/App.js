@@ -1,32 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import Login from './Login';
 
 function App() {
+  const [showLogin, setShowLogin] = useState(true);
   const [superheroes, setSuperheroes] = useState([]);
   const [selectedHeroes, setSelectedHeroes] = useState([]);
   const [currentView, setCurrentView] = useState('table'); // 'table' or 'comparison'
+  const [comparisonResult, setComparisonResult] = useState(null);
 
   useEffect(() => {
-    fetch('/api/superheroes')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // Ensure data is an array
-        if (Array.isArray(data)) {
-          setSuperheroes(data);
-        } else {
-          setSuperheroes([]);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching superheroes:', error);
-        setSuperheroes([]); // Set empty array on error
-      });
-  }, []);
+    if (!showLogin) {
+      fetch('/api/superheroes')
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // Ensure data is an array
+          if (Array.isArray(data)) {
+            setSuperheroes(data);
+          } else {
+            setSuperheroes([]);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching superheroes:', error);
+          setSuperheroes([]); // Set empty array on error
+        });
+    }
+  }, [showLogin]);
 
   const handleHeroSelection = (hero) => {
     setSelectedHeroes(prev => {
@@ -47,55 +52,33 @@ function App() {
     return selectedHeroes.some(h => h.id === heroId);
   };
 
-  const handleCompare = () => {
+  const handleCompare = async () => {
     if (selectedHeroes.length === 2) {
-      setCurrentView('comparison');
+      try {
+        const response = await fetch(`/api/superheroes/compare?id1=${selectedHeroes[0].id}&id2=${selectedHeroes[1].id}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        setComparisonResult(result);
+        setCurrentView('comparison');
+      } catch (error) {
+        console.error('Error fetching comparison:', error);
+      }
     }
   };
 
   const handleBackToTable = () => {
     setCurrentView('table');
     setSelectedHeroes([]);
-  };
-
-  const getSafeStat = (hero, stat) => {
-    if (!hero.powerstats || hero.powerstats[stat] === null || hero.powerstats[stat] === undefined) {
-      return 0;
-    }
-    const value = parseInt(hero.powerstats[stat]);
-    return isNaN(value) ? 0 : value;
-  };
-
-  const calculateWinner = (hero1, hero2) => {
-    const stats = ['intelligence', 'strength', 'speed', 'durability', 'power', 'combat'];
-    let hero1Score = 0;
-    let hero2Score = 0;
-    
-    stats.forEach(stat => {
-      const stat1 = getSafeStat(hero1, stat);
-      const stat2 = getSafeStat(hero2, stat);
-      if (stat1 > stat2) {
-        hero1Score++;
-      } else if (stat2 > stat1) {
-        hero2Score++;
-      }
-    });
-
-    if (hero1Score > hero2Score) {
-      return { winner: hero1, score: `${hero1Score}-${hero2Score}` };
-    } else if (hero2Score > hero1Score) {
-      return { winner: hero2, score: `${hero2Score}-${hero1Score}` };
-    } else {
-      return { winner: null, score: `${hero1Score}-${hero2Score}` };
-    }
+    setComparisonResult(null);
   };
 
   const renderComparison = () => {
-    if (selectedHeroes.length !== 2) return null;
+    if (selectedHeroes.length !== 2 || !comparisonResult) return null;
     
     const [hero1, hero2] = selectedHeroes;
-    const result = calculateWinner(hero1, hero2);
-    const stats = ['intelligence', 'strength', 'speed', 'durability', 'power', 'combat'];
+    const { categories, overall_winner } = comparisonResult;
 
     return (
       <div className="comparison-view">
@@ -121,21 +104,19 @@ function App() {
         </div>
 
         <div className="stats-comparison">
-          {stats.map(stat => {
-            const stat1 = getSafeStat(hero1, stat);
-            const stat2 = getSafeStat(hero2, stat);
-            const winner = stat1 > stat2 ? 'hero1' : stat1 < stat2 ? 'hero2' : 'tie';
+          {categories.map(category => {
+            const winner = category.winner === 1 ? 'hero1' : category.winner === 2 ? 'hero2' : 'tie';
             
             return (
-              <div key={stat} className="stat-row">
+              <div key={category.name} className="stat-row">
                 <div className={`stat-value ${winner === 'hero1' ? 'winner' : ''}`}>
-                  {stat1}
+                  {category.id1_value}
                 </div>
                 <div className="stat-name">
-                  {stat.charAt(0).toUpperCase() + stat.slice(1)}
+                  {category.name.charAt(0).toUpperCase() + category.name.slice(1)}
                 </div>
                 <div className={`stat-value ${winner === 'hero2' ? 'winner' : ''}`}>
-                  {stat2}
+                  {category.id2_value}
                 </div>
               </div>
             );
@@ -144,15 +125,23 @@ function App() {
 
         <div className="final-result">
           <h2>Final Result</h2>
-          {result.winner ? (
-            <div className="winner-announcement">
-              <h3>🏆 {result.winner.name} Wins!</h3>
-              <p>Score: {result.score}</p>
-            </div>
-          ) : (
+          {overall_winner === 'tie' ? (
             <div className="tie-announcement">
               <h3>🤝 It's a Tie!</h3>
-              <p>Score: {result.score}</p>
+              <p>Score: {(() => {
+                const hero1Wins = categories.filter(cat => cat.winner === 1).length;
+                const hero2Wins = categories.filter(cat => cat.winner === 2).length;
+                return `${hero1Wins}-${hero2Wins}`;
+              })()}</p>
+            </div>
+          ) : (
+            <div className="winner-announcement">
+              <h3>🏆 {overall_winner === 1 ? hero1.name : hero2.name} Wins!</h3>
+              <p>Score: {(() => {
+                const hero1Wins = categories.filter(cat => cat.winner === 1).length;
+                const hero2Wins = categories.filter(cat => cat.winner === 2).length;
+                return overall_winner === 1 ? `${hero1Wins}-${hero2Wins}` : `${hero2Wins}-${hero1Wins}`;
+              })()}</p>
             </div>
           )}
         </div>
@@ -210,12 +199,12 @@ function App() {
               <td>{hero.id}</td>
               <td>{hero.name}</td>
               <td><img src={hero.image} alt={hero.name} width="50" /></td>
-              <td>{getSafeStat(hero, 'intelligence')}</td>
-              <td>{getSafeStat(hero, 'strength')}</td>
-              <td>{getSafeStat(hero, 'speed')}</td>
-              <td>{getSafeStat(hero, 'durability')}</td>
-              <td>{getSafeStat(hero, 'power')}</td>
-              <td>{getSafeStat(hero, 'combat')}</td>
+              <td>{hero.powerstats?.intelligence || 0}</td>
+              <td>{hero.powerstats?.strength || 0}</td>
+              <td>{hero.powerstats?.speed || 0}</td>
+              <td>{hero.powerstats?.durability || 0}</td>
+              <td>{hero.powerstats?.power || 0}</td>
+              <td>{hero.powerstats?.combat || 0}</td>
             </tr>
           ))}
         </tbody>
@@ -223,6 +212,13 @@ function App() {
     </div>
   );
 
+  if (showLogin) {
+    return (
+      <div className="App">
+        <Login onLogin={() => setShowLogin(false)} />
+      </div>
+    );
+  }
   return (
     <div className="App">
       <header className="App-header">

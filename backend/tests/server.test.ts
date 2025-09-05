@@ -87,3 +87,46 @@ describe('GET /api/superheroes/:id/powerstats', () => {
   });
 });
 
+describe('GET /api/superheroes/compare', () => {
+  it('should compare two valid superheroes and return structured result', async () => {
+    const response = await request(app).get('/api/superheroes/compare?id1=1&id2=2');
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('id1', 1);
+    expect(response.body).toHaveProperty('id2', 2);
+    expect(Array.isArray(response.body.categories)).toBe(true);
+    const expectedOrder = ['intelligence', 'strength', 'speed', 'durability', 'power', 'combat'];
+    expect(response.body.categories.map((c: any) => c.name)).toEqual(expectedOrder);
+    // spot check a couple values
+    const strengthCat = response.body.categories.find((c: any) => c.name === 'strength');
+    expect(strengthCat.id1_value).toBe(100); // hero 1 strength
+    expect(strengthCat.id2_value).toBe(18); // hero 2 strength
+    expect(['tie', 1, 2]).toContain(strengthCat.winner);
+  // overall winner should be tie (3 wins each)
+  expect(response.body.overall_winner).toBe('tie');
+  });
+
+  it('should return error when id1 missing', async () => {
+    const response = await request(app).get('/api/superheroes/compare?id2=2');
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: 'Both id1 and id2 query parameters are required', status: 'invalid_request' });
+  });
+
+  it('should return error when id2 missing', async () => {
+    const response = await request(app).get('/api/superheroes/compare?id1=1');
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: 'Both id1 and id2 query parameters are required', status: 'invalid_request' });
+  });
+
+  it('should return error when ids are non-numeric', async () => {
+    const response = await request(app).get('/api/superheroes/compare?id1=abc&id2=2');
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: 'id1 and id2 must be valid numbers', status: 'invalid_request' });
+  });
+
+  it('should return error when one hero not found', async () => {
+    const response = await request(app).get('/api/superheroes/compare?id1=1&id2=9999');
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: 'One or both superheroes not found', status: 'invalid_request' });
+  });
+});
+

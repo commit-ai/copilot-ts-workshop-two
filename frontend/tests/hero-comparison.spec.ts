@@ -56,10 +56,11 @@ test.describe('Hero Comparison View', () => {
     // Verify specific stat values based on known data
     // A-Bomb: Intelligence 38, Strength 100, Speed 17, Durability 80, Power 24, Combat 64
     // Ant-Man: Intelligence 100, Strength 18, Speed 23, Durability 28, Power 32, Combat 32
-    await expect(page.getByText('38')).toBeVisible(); // A-Bomb Intelligence
-    await expect(page.getByText('100').first()).toBeVisible(); // A-Bomb Strength or Ant-Man Intelligence
-    await expect(page.getByText('17')).toBeVisible(); // A-Bomb Speed
-    await expect(page.getByText('23')).toBeVisible(); // Ant-Man Speed
+    const statsComparison = page.locator('.stats-comparison');
+    await expect(statsComparison.getByText('38')).toBeVisible(); // A-Bomb Intelligence
+    await expect(statsComparison.getByText('100').first()).toBeVisible(); // A-Bomb Strength or Ant-Man Intelligence
+    await expect(statsComparison.getByText('17')).toBeVisible(); // A-Bomb Speed
+    await expect(statsComparison.getByText('23')).toBeVisible(); // Ant-Man Speed
   });
 
   test('calculates and displays winner correctly for clear victory', async ({ page }) => {

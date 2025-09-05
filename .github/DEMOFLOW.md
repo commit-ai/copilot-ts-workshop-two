@@ -41,9 +41,10 @@ flowchart TD
 - [x] **07 - Coding Agent**: assign issue directly from VS Code to Coding Agent to work in the background
 - [x] **08 - QA Playwright Tests**: Generate frontend Playwrite tests (as AI TDD)
 - [x] **09 - QA Playwright MCP + Chat Mode**: use Playwrite MCP to find more edge cases
-- [ ] **10 FE/BE - Refactor with Agent**: move comparison logic to backend (AI TDD), modify FE logic, keep UI as-is, run PW tests (AI TDD)
+- [x] **10 - BE - Refactor with Agent**: instead of one-shot refactors, break down to testable parts. First - move comparison logic to backend (AI TDD)
+- [x] **10 - FE - Refactor with Agent**: Now modify FE logic to call API, keep UI as-is, run PW tests (AI TDD)
 - [x] **11 - Prompts**: use task-specific prompt to review the APIs for Security issues
-- [ ] **12 - Code Review in IDE**: review selection + review uncommited changes
+- [x] **12 - Code Review in IDE**: review selection + review uncommited changes
 - [ ] **13 - Vision to add Login Screen**: Using a screenshot for Design-to-Code
 MAYBE - simplify vision task? or its fast?
 - [ ] **14 - Chat Modes**: Review several modes: Plan, Debug, 4.1-Beast - they will install
@@ -62,8 +63,8 @@ MAYBE - simplify vision task? or its fast?
 - [ ] Task lists
 - [ ] Never "Accpet" until happy
 - [ ] Restore Checkpoint
-- [ ] Vision for errors, flowcharts, etc
-- [ ] Voice - you can speak when you are tired of typing!
+- [ ] Vision for mockups, errors, flowcharts, etc
+- [ ] MAYBE: Voice - you can speak when you are tired of typing!
 - [ ] MAYBE: Very Advanced - Repomix?
 
 ---
@@ -74,7 +75,7 @@ MAYBE - simplify vision task? or its fast?
 * *VS Code is recommended for trying out all features
 - [ ] 00 - Create a new local branch for playing around (e.g. "copilot-playground")
 - [ ] 01 - Generate your own copilot instructions MD for your repo (VS Code only)
-- [ ] 02 - Use Voice - use the "mic" icon and ask copilot about your project (VS Code only)
+- [ ] NOT SURE Ext. - 02 - Use Voice - use the "mic" icon and ask copilot about your project (VS Code only)
 - [ ] 03 - Generate tests & iterate until they pass (either unit or playwright) for some functionality
 **Bonus** - use Playwright MCP
 https://github.com/microsoft/playwright-mcp

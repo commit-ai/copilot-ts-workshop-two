@@ -72,6 +72,52 @@ app.get('/api/superheroes', async (req, res) => {
 });
 
 /**
+ * GET /api/superheroes/compare?id1=&id2=
+ * (Placed before param routes to avoid /:id capturing 'compare')
+ * Compares two superheroes across standardized powerstat categories.
+ */
+app.get('/api/superheroes/compare', async (req, res) => {
+  const { id1, id2 } = req.query;
+  const id1Num = Number(id1);
+  const id2Num = Number(id2);
+  if (!id1 || !id2) {
+    return res.status(400).json({ error: 'Both id1 and id2 query parameters are required', status: 'invalid_request' });
+  }
+  if (Number.isNaN(id1Num) || Number.isNaN(id2Num)) {
+    return res.status(400).json({ error: 'id1 and id2 must be valid numbers', status: 'invalid_request' });
+  }
+
+  try {
+    const superheroes = await loadSuperheroes();
+    const hero1 = superheroes.find((h: any) => Number(h.id) === id1Num);
+    const hero2 = superheroes.find((h: any) => Number(h.id) === id2Num);
+    if (!hero1 || !hero2) {
+      return res.status(400).json({ error: 'One or both superheroes not found', status: 'invalid_request' });
+    }
+
+    const categoriesOrder = ['intelligence', 'strength', 'speed', 'durability', 'power', 'combat'] as const;
+    type CategoryName = typeof categoriesOrder[number];
+    interface CategoryResult { name: CategoryName; winner: 1 | 2 | 'tie'; id1_value: number; id2_value: number; }
+    const categories: CategoryResult[] = categoriesOrder.map((cat) => {
+      const v1 = Number(hero1.powerstats?.[cat]);
+      const v2 = Number(hero2.powerstats?.[cat]);
+      let winner: 1 | 2 | 'tie' = 'tie';
+      if (v1 > v2) winner = 1; else if (v2 > v1) winner = 2;
+      return { name: cat, winner, id1_value: v1, id2_value: v2 };
+    });
+
+    const hero1Wins = categories.filter(c => c.winner === 1).length;
+    const hero2Wins = categories.filter(c => c.winner === 2).length;
+    const overall_winner: 1 | 2 | 'tie' = hero1Wins > hero2Wins ? 1 : hero2Wins > hero1Wins ? 2 : 'tie';
+
+    return res.json({ id1: id1Num, id2: id2Num, categories, overall_winner });
+  } catch (err) {
+    console.error('Error loading superheroes data:', err);
+    return res.status(500).send('Internal Server Error');
+  }
+});
+
+/**
  * GET /api/superheroes/:id
  * Returns a single superhero by their unique ID.
  *
@@ -120,6 +166,29 @@ app.get('/api/superheroes/:id/powerstats', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+/**
+ * GET /api/superheroes/compare?id1=&id2=
+ * Compares two superheroes across standardized powerstat categories.
+ *
+ * Query Params:
+ *  - id1: number (required)
+ *  - id2: number (required)
+ *
+ * Response 200 JSON structure:
+ * {
+ *   id1: <number>,
+ *   id2: <number>,
+ *   categories: [
+ *     { name: 'intelligence', winner: 1|2|"tie", id1_value: <number>, id2_value: <number> },
+ *     ... (strength, speed, durability, power, combat in this order)
+ *   ],
+ *   overall_winner: 1|2|"tie"
+ * }
+ *
+ * Error 400 JSON structure (invalid/missing ids):
+ * { error: <string>, status: 'invalid_request' }
+ */
 
 // Start the server only if not in test environment
 if (process.env.NODE_ENV !== 'test') {
