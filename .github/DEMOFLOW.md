@@ -45,9 +45,9 @@ flowchart TD
 - [x] **10 - FE - Refactor with Agent**: Now modify FE logic to call API, keep UI as-is, run PW tests (AI TDD)
 - [x] **11 - Prompts**: use task-specific prompt to review the APIs for Security issues
 - [x] **12 - Code Review in IDE**: review selection + review uncommited changes
-- [ ] **13 - Vision to add Login Screen**: Using a screenshot for Design-to-Code
+- [x] **13 - Vision to add Login Screen**: Using a screenshot for Design-to-Code
 MAYBE - simplify vision task? or its fast?
-- [ ] **14 - Chat Modes**: Review several modes: Plan, Debug, 4.1-Beast - they will install
+- [ ] **14 - More Chat Modes**: Review several modes: Plan, Debug, 4.1-Beast - they will install
 - [ ] **MAYBE: Code Review in CI**: Look at the Code Review in the CI it automatically did
 - [ ] **Questions?**
 
@@ -55,9 +55,11 @@ MAYBE - simplify vision task? or its fast?
 
 **Key Tips & Best Practices:**
 - [x] Starting new sessions every time
-- [x] TDD + Agent run commands in terminal to close feedback loops
+- [x] Agent with TDD (Test Driven Dev) as stop condition and to close feedback loops
+- [x] Agent should run CLI commands to close feedback loops
 - [ ] Multiple copilot sessions
 - [ ] Choosing the right models: https://docs.github.com/en/copilot/reference/ai-models/model-comparison
+- [ ] Awesome prompts+MCPs repo at https://promptboost.dev
 - [ ] Optimizing prompts for GPT-5: https://cdn.openai.com/API/docs/gpt-5-for-coding-cheatsheet.pdf
 - [ ] Breaking complex stuff down
 - [ ] Task lists

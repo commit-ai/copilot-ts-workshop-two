@@ -19,7 +19,7 @@ Review the chatmode Playwright prompt:
 
 Then use Playwright-Tester mode:
 ```
-Explore the website, check how we can improveme to existing tests, improve them, document them, run the tests, fix until all pass reliably.
+Explore the web app, check how we can improveme to existing tests, improve them, document them, run the tests, fix until all pass reliably.
 To run them - navigate into the /frontend folder, and run using this command: "npx playwright test --reporter=line"
 Assume frontend server is already running!
 ```
