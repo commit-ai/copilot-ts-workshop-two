@@ -10,7 +10,7 @@
 
 ## Step 1: Switch to Migration Agent
 
-In the chat, switch to the **Migration** agent (`@Migration`).
+In the chat, switch to the **Migration** agent (`@Migration`) with ts-migration skill.
 
 ---
 
