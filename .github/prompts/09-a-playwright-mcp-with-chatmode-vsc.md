@@ -1,19 +1,14 @@
 # Playwright MCP + Chatmode to test the app
 
-# Claude Sonnet 4
+# Claude Sonnet 4.5
 
-Installing the MCP and Chatmode:
-- Go to https://promptboost.dev/ and search for "Playwright"
-- Install the MCP
-- Get the custom Chatmode and install it
-
-Alternatively we can:
-- Go to GitHub MCP Registry and find the Playwright MCP:
+Pre-requisites:
+- Go to GitHub MCP Registry and find the Playwright MCP and install it:
 https://github.com/mcp
-- Go to awesome-copilot to find the prompt: https://github.com/github/awesome-copilot
+- Go to awesome-copilot to find the prompt: https://github.com/github/awesome-copilot/blob/main/agents/playwright-tester.agent.md
 
 
-Review the Custom Playwright agent MD:
+Review the custom Playwright agent MD:
 - Note the **tooling**
 - Note the **model**
 - Note the **instructions**
@@ -30,5 +25,3 @@ To run tests - navigate into the /frontend folder, and run using this command: "
 
 Assume frontend server is already running on port localhost 3001!
 ```
-
-NOTE: In non-VS Code IDEs, we can still achieve the same with the MCP and use as a prompt instead of using the chat mode

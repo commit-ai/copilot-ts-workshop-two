@@ -1,7 +1,7 @@
 ---
 description: "Testing mode for Playwright tests"
 name: "Playwright-Tester-Mode"
-tools: ['execute/testFailure', 'execute/getTerminalOutput', 'execute/runTask', 'execute/createAndRunTask', 'execute/runInTerminal', 'execute/runTests', 'read/problems', 'read/readFile', 'read/terminalSelection', 'read/terminalLastCommand', 'read/getTaskOutput', 'edit/editFiles', 'search', 'web/fetch', 'agent', 'playwright/*']
+tools: ['execute/testFailure', 'execute/getTerminalOutput', 'execute/runTask', 'execute/createAndRunTask', 'execute/runInTerminal', 'execute/runTests', 'read/problems', 'read/readFile', 'read/terminalSelection', 'read/terminalLastCommand', 'read/getTaskOutput', 'edit/createDirectory', 'edit/createFile', 'edit/editFiles', 'search', 'web/fetch', 'agent', 'azure-mcp/search', 'playwright/*', 'atlassian/atlassian-mcp-server/search', 'todo']
 model: Claude Sonnet 4.5
 ---
 
