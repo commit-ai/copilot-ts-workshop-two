@@ -13,7 +13,6 @@ import './App.css';
  * Handles fetching superhero data, hero selection, and switching between
  * table view and comparison view.
  * 
- * @component
  * @returns {JSX.Element} The main application UI
  */
 function App() {
@@ -85,8 +84,8 @@ function App() {
    * Each stat category (intelligence, strength, speed, durability, power, combat)
    * is compared, and the hero with more winning categories wins overall.
    * 
-   * @param {Object} hero1 - First superhero object with powerstats
-   * @param {Object} hero2 - Second superhero object with powerstats
+   * @param {Object} hero1 - First superhero object containing name, id, image, and powerstats properties
+   * @param {Object} hero2 - Second superhero object containing name, id, image, and powerstats properties
    * @returns {Object} Object containing winner (hero object or null for tie) and score string
    */
   const calculateWinner = (hero1, hero2) => {
@@ -119,7 +118,7 @@ function App() {
    * Shows hero images, stat-by-stat comparison with visual indicators,
    * and the final winner determination.
    * 
-   * @returns {JSX.Element|null} The comparison view component or null if requirements not met
+   * @returns {JSX.Element|null} The comparison view JSX element, or null if exactly 2 heroes are not selected
    */
   const renderComparison = () => {
     if (selectedHeroes.length !== 2) return null;
