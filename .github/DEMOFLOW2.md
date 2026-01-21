@@ -9,14 +9,12 @@
 - [ ] [05 Code Review in VS Code](prompts/12-code-review-vs-code.md): review selection + review uncommited changes
 - [ ] [06 Code Review on GH](https://github.com/commit-ai/copilot-ts-workshop-two/pull/14): get copilot reviw on GH/CI
 
-### Demo 3: Agent+MCP, Coding Agent
+### Demo 3: Agent+MCP, Coding Agent, CLI, GH.com
 - [ ] [07 Build MCP](specs/superhero-mcp.spec.md): Plan from spec & Implment a Superheroes MCP to get superhero data schema via MCP
 - [ ] **08 GitHub MCP**: List open issues on GitHub using MCP (issue: add docs to App.jsx)
 - [ ] **09 Coding Agent**: #assign_copilot_to_issue / "Delegate" button - delegate to Cloud Coding Agent, see Agent Sessions and [PR link](https://github.com/commit-ai/copilot-ts-workshop-two/pull/22)
 - [ ] [10 Playwright Tests](prompts/08-adding-e2e-playwright-tests.md): Generate frontend Playwrite tests (as AI TDD) - prompt and output only
 - [ ] [11 QA Playwright MCP + Custom Agent](prompts/09-a-playwright-mcp-with-chatmode-vsc.md): use Playwrite MCP to add edge cases
-
-### Demo 4: Copilot in CLI & github.com
 - [ ] 12 **GitHub CLI** - /help, choose model, mcp, agents, skills, plan, context
 - [ ] 13 [Copilot in github.com](https://github.com/copilot) - create issues, tasks, ask, explain
 
