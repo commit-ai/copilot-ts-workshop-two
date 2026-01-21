@@ -1,7 +1,7 @@
 ---
 description: "Expert at creating Playwright tests"
 name: "Playwright-Tester"
-tools: ['execute/getTerminalOutput', 'execute/runTask', 'execute/createAndRunTask', 'execute/testFailure', 'execute/runInTerminal', 'execute/runTests', 'read/terminalSelection', 'read/terminalLastCommand', 'read/getTaskOutput', 'read/problems', 'read/readFile', 'edit/editFiles', 'search', 'web/fetch', 'playwright/*']
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'agent', 'playwright/*', 'memory', 'todo']
 model: Claude Sonnet 4.5
 ---
 

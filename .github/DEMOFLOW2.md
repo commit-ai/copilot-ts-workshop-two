@@ -17,7 +17,7 @@
 - [ ] [11 QA Playwright MCP + Custom Agent](prompts/09-a-playwright-mcp-with-chatmode-vsc.md): use Playwrite MCP to add edge cases
 
 ### Demo 4: Copilot in CLI & github.com
-- [ ] 12 **GitHub CLI** - /help, choose model, mcp, agents
+- [ ] 12 **GitHub CLI** - /help, choose model, mcp, agents, skills, plan, context
 - [ ] 13 [Copilot in github.com](https://github.com/copilot) - create issues, tasks, ask, explain
 
 
@@ -28,10 +28,8 @@
 **Key Tips & Best Practices:**
 - [ ] Context: Start a NEW session for every new task/topic!
 - [ ] Customize: via instructions, prompts, skills, custom agents
-- [ ] Customize: Awesome prompts+MCPs repo at https://promptboost.dev
 - [ ] Agent: Use (or build) MCPs where it makes sense
 - [ ] Agent: Never "Accpet" until happy
-- [ ] Agent: Restore Checkpoint
 - [ ] Agent: TDD (Test Driven Dev) as Agent stop condition and feedback loop
 - [ ] Agent: should run CLI commands to close feedback loop
 - [ ] Coding Agent: delegate to a background agent in the cloud or locally (CLI)
