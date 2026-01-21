@@ -89,9 +89,7 @@ function App() {
    * 
    * @param {Object} hero1 - The first hero to compare
    * @param {Object} hero2 - The second hero to compare
-   * @returns {Object} Object containing the winner (or null for tie) and the score string
-   * @returns {Object.winner} - The winning hero object, or null if tied
-   * @returns {Object.score} - Score string in format "X-Y"
+   * @returns {{winner: Object|null, score: string}} Object containing winner (hero object or null for tie) and score string in 'X-Y' format
    */
   const calculateWinner = (hero1, hero2) => {
     // All stat categories used for comparison
