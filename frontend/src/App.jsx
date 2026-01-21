@@ -112,7 +112,13 @@ function App() {
    * @param {number} hero1.powerstats.power - Power stat
    * @param {number} hero1.powerstats.combat - Combat stat
    * @param {Object} hero2 - The second hero to compare
-   * @param {Object} hero2.powerstats - The power statistics object (same structure as hero1)
+   * @param {Object} hero2.powerstats - The power statistics object
+   * @param {number} hero2.powerstats.intelligence - Intelligence stat
+   * @param {number} hero2.powerstats.strength - Strength stat
+   * @param {number} hero2.powerstats.speed - Speed stat
+   * @param {number} hero2.powerstats.durability - Durability stat
+   * @param {number} hero2.powerstats.power - Power stat
+   * @param {number} hero2.powerstats.combat - Combat stat
    * @returns {Object} The comparison result
    * @returns {Object|null} returns.winner - The winning hero object, or null if it's a tie
    * @returns {string} returns.score - The final score in format "X-Y" where X is winner's score
