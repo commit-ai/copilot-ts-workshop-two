@@ -1,21 +1,18 @@
 # Playwright MCP + Chatmode to test the app
 
-# Claude Sonnet 4.5
-
 Pre-requisites:
 - Go to GitHub MCP Registry and find the Playwright MCP and install it:
 https://github.com/mcp
 - Go to awesome-copilot to find the prompt: https://github.com/github/awesome-copilot/blob/main/agents/playwright-tester.agent.md
 
-
-Review the custom Playwright agent MD:
+Review the custom Playwright agent MD - [agents/Playwright-Tester.agent.md](../agents/Playwright-Tester.agent.md):
 - Note the **tooling**
 - Note the **model**
 - Note the **instructions**
 
 
 1. Open chat in **NEW WINDOW** (parallel session)
-2. Then use Playwright-Tester agent (with Sonnet 4.5):
+2. Then use Playwright-Tester agent:
 ```
 Using Playwright MCP - explore the web app already running on localhost port 3001, and the existing tests under /frontend/tests/ - suggest edge case tests to improve the existing test coverage, and write your suggested improvement PLAN (not code).
 

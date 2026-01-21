@@ -2,7 +2,7 @@
 description: 'Testing mode for Playwright tests'
 mode: 'agent'
 tools: ['changes', 'codebase', 'editFiles', 'fetch', 'findTestFiles', 'problems', 'runCommands', 'runTasks', 'runTests', 'search', 'searchResults', 'terminalLastCommand', 'terminalSelection', 'testFailure', 'playwright']
-model: Claude Sonnet 4
+model: Claude Sonnet 4.5
 ---
 
 ## Core Responsibilities

@@ -13,7 +13,7 @@
 - [ ] [07 Build MCP](specs/superhero-mcp.spec.md): Plan from spec & Implment a Superheroes MCP to get superhero data schema via MCP
 - [ ] **08 GitHub MCP**: List open issues on GitHub using MCP (issue: add docs to App.jsx)
 - [ ] **09 Coding Agent**: #assign_copilot_to_issue / "Delegate" button - delegate to Cloud Coding Agent, see Agent Sessions and [PR link](https://github.com/commit-ai/copilot-ts-workshop-two/pull/22)
-- [ ] [10 Playwright Tests](prompts/08-adding-e2e-playwright-tests.md): Generate frontend Playwrite tests (as AI TDD)
+- [ ] [10 Playwright Tests](prompts/08-adding-e2e-playwright-tests.md): Generate frontend Playwrite tests (as AI TDD) - prompt and output only
 - [ ] [11 QA Playwright MCP + Custom Agent](prompts/09-a-playwright-mcp-with-chatmode-vsc.md): use Playwrite MCP to add edge cases
 
 ### Demo 4: Copilot in CLI & github.com
@@ -27,7 +27,7 @@
 
 **Key Tips & Best Practices:**
 - [ ] Context: Start a NEW session for every new task/topic!
-- [ ] Customize: via instructions, prompts, custom agents
+- [ ] Customize: via instructions, prompts, skills, custom agents
 - [ ] Customize: Awesome prompts+MCPs repo at https://promptboost.dev
 - [ ] Agent: Use (or build) MCPs where it makes sense
 - [ ] Agent: Never "Accpet" until happy

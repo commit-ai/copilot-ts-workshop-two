@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "echo \"Session started: $(date)\" >> .github/logs/session.log",
+        "powershell": "Add-Content -Path .github/logs/session.log -Value \"Session started: $(Get-Date)\"",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ],
+    "userPromptSubmitted": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/scripts/log-prompt.sh",
+        "powershell": ".github/hooks/scripts/log-prompt.ps1",
+        "cwd": ".",
+        "env": {
+          "LOG_LEVEL": "INFO"
+        }
+      }
+    ],
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/scripts/security-check.sh",
+        "powershell": ".github/hooks/scripts/security-check.ps1",
+        "cwd": ".",
+        "timeoutSec": 15
+      },
+      {
+        "type": "command",
+        "bash": ".github/hooks/scripts/log-tool-use.sh",
+        "powershell": ".github/hooks/scripts/log-tool-use.ps1",
+        "cwd": "."
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "cat >> .github/logs/tool-results.jsonl && echo '' >> .github/logs/tool-results.jsonl",
+        "powershell": "$input | Add-Content -Path .github/logs/tool-results.jsonl"
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": ".github/hooks/scripts/cleanup.sh",
+        "powershell": ".github/hooks/scripts/cleanup.ps1",
+        "cwd": ".",
+        "timeoutSec": 60
+      }
+    ]
+  }
+}
