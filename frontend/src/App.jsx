@@ -90,8 +90,8 @@ function App() {
    * @param {Object} hero1 - The first hero to compare
    * @param {Object} hero2 - The second hero to compare
    * @returns {Object} Object containing the winner (or null for tie) and the score string
-   * @returns {Object|null} result.winner - The winning hero object, or null if tied
-   * @returns {string} result.score - Score string in format "X-Y"
+   * @returns {Object.winner} - The winning hero object, or null if tied
+   * @returns {Object.score} - Score string in format "X-Y"
    */
   const calculateWinner = (hero1, hero2) => {
     // All stat categories used for comparison
@@ -121,6 +121,7 @@ function App() {
   /**
    * Renders the comparison view showing two heroes side-by-side with their stats
    * and determining a winner based on stat comparisons.
+   * Returns null if not exactly 2 heroes are selected.
    * 
    * @returns {JSX.Element|null} The comparison view JSX or null if not exactly 2 heroes selected
    */
