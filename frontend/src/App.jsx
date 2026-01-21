@@ -119,7 +119,7 @@ function App() {
    * @param {number} hero2.powerstats.durability - Durability stat
    * @param {number} hero2.powerstats.power - Power stat
    * @param {number} hero2.powerstats.combat - Combat stat
-   * @returns {{winner: Object|null, score: string}} The comparison result with winner (the winning hero object, or null if tie) and score (in format "hero1Score-hero2Score", always showing hero1's score first)
+   * @returns {{winner: Object|null, score: string}} The comparison result with winner (the winning hero object, or null if tie) and score (in format "winnerScore-loserScore" when there's a winner, or "hero1Score-hero2Score" when tied)
    */
   const calculateWinner = (hero1, hero2) => {
     const stats = ['intelligence', 'strength', 'speed', 'durability', 'power', 'combat'];
