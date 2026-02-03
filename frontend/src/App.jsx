@@ -1,11 +1,36 @@
+/**
+ * @fileoverview Main application component for the Superhero Comparison App.
+ * This component provides functionality to view superheroes, select them,
+ * and compare their stats to determine a winner.
+ * 
+ * Features:
+ * - Fetch and display superheroes from the backend API
+ * - Select up to 2 superheroes for comparison
+ * - View detailed comparison of superhero stats
+ * - Calculate winner based on powerstats
+ */
+
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
+/**
+ * Main application component that manages superhero data and comparison views.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered application
+ */
 function App() {
+  // State: Array of all superheroes fetched from API
   const [superheroes, setSuperheroes] = useState([]);
+  // State: Array of up to 2 selected superheroes for comparison
   const [selectedHeroes, setSelectedHeroes] = useState([]);
+  // State: Current view - either 'table' (superhero list) or 'comparison' (hero vs hero)
   const [currentView, setCurrentView] = useState('table'); // 'table' or 'comparison'
 
+  /**
+   * Fetch superheroes from the backend API on component mount.
+   * Retrieves all superhero data including stats and images.
+   */
   useEffect(() => {
     fetch('/api/superheroes')
       .then((response) => response.json())
@@ -13,6 +38,14 @@ function App() {
       .catch((error) => console.error('Error fetching superheroes:', error));
   }, []);
 
+  /**
+   * Handle the selection and deselection of superheroes for comparison.
+   * - Deselects hero if already selected
+   * - Adds hero if less than 2 are selected
+   * - Replaces oldest selection if 2 are already selected (maintains most recent 2)
+   * 
+   * @param {Object} hero - The superhero object to toggle
+   */
   const handleHeroSelection = (hero) => {
     setSelectedHeroes(prev => {
       if (prev.find(h => h.id === hero.id)) {
@@ -28,26 +61,53 @@ function App() {
     });
   };
 
+  /**
+   * Check if a hero is currently selected for comparison.
+   * 
+   * @param {number} heroId - The ID of the hero to check
+   * @returns {boolean} True if the hero is selected, false otherwise
+   */
   const isHeroSelected = (heroId) => {
     return selectedHeroes.some(h => h.id === heroId);
   };
 
+  /**
+   * Switch to the comparison view if exactly 2 heroes are selected.
+   * This is triggered when the user clicks the "Compare Heroes" button.
+   */
   const handleCompare = () => {
     if (selectedHeroes.length === 2) {
       setCurrentView('comparison');
     }
   };
 
+  /**
+   * Return to the superhero table view and clear all selections.
+   * This is triggered when the user clicks the back button in comparison view.
+   */
   const handleBackToTable = () => {
     setCurrentView('table');
     setSelectedHeroes([]);
   };
 
+  /**
+   * Calculate which hero wins based on their powerstats.
+   * Compares all six stats: intelligence, strength, speed, durability, power, combat.
+   * The hero with more winning stats is the winner.
+   * 
+   * @param {Object} hero1 - First superhero to compare
+   * @param {Object} hero2 - Second superhero to compare
+   * @returns {Object} Result object containing:
+   *   - winner: The winning hero object, or null if there's a tie
+   *   - score: String representation of the score (e.g., "4-2")
+   */
   const calculateWinner = (hero1, hero2) => {
+    // Stats to compare between heroes
     const stats = ['intelligence', 'strength', 'speed', 'durability', 'power', 'combat'];
     let hero1Score = 0;
     let hero2Score = 0;
     
+    // Count wins for each hero across all stats
     stats.forEach(stat => {
       if (hero1.powerstats[stat] > hero2.powerstats[stat]) {
         hero1Score++;
@@ -56,6 +116,7 @@ function App() {
       }
     });
 
+    // Determine winner based on total scores
     if (hero1Score > hero2Score) {
       return { winner: hero1, score: `${hero1Score}-${hero2Score}` };
     } else if (hero2Score > hero1Score) {
@@ -65,6 +126,13 @@ function App() {
     }
   };
 
+  /**
+   * Render the comparison view showing two heroes side-by-side.
+   * Displays hero images, stat-by-stat comparison with visual indicators,
+   * and the final winner announcement.
+   * 
+   * @returns {JSX.Element|null} The comparison view or null if not enough heroes selected
+   */
   const renderComparison = () => {
     if (selectedHeroes.length !== 2) return null;
     
@@ -79,6 +147,7 @@ function App() {
         </button>
         <h1>Superhero Comparison</h1>
         
+        {/* Hero images and names displayed side-by-side */}
         <div className="comparison-container">
           <div className="hero-card">
             <img src={hero1.image} alt={hero1.name} className="hero-image" />
@@ -95,10 +164,12 @@ function App() {
           </div>
         </div>
 
+        {/* Stat-by-stat comparison with visual indicators for winner */}
         <div className="stats-comparison">
           {stats.map(stat => {
             const stat1 = hero1.powerstats[stat];
             const stat2 = hero2.powerstats[stat];
+            // Determine which hero wins this stat (or tie)
             const winner = stat1 > stat2 ? 'hero1' : stat1 < stat2 ? 'hero2' : 'tie';
             
             return (
@@ -117,6 +188,7 @@ function App() {
           })}
         </div>
 
+        {/* Final result showing winner or tie */}
         <div className="final-result">
           <h2>Final Result</h2>
           {result.winner ? (
@@ -135,9 +207,16 @@ function App() {
     );
   };
 
+  /**
+   * Render the table view displaying all superheroes with selection checkboxes.
+   * Shows all hero stats and allows users to select heroes for comparison.
+   * 
+   * @returns {JSX.Element} The superhero table view
+   */
   const renderTable = () => (
     <div className="table-view">
       <h1>Superheroes</h1>
+      {/* Selection status and compare button */}
       <div className="selection-info">
         <p>Select 2 superheroes to compare ({selectedHeroes.length}/2 selected)</p>
         {selectedHeroes.length > 0 && (
@@ -154,6 +233,7 @@ function App() {
         </button>
       </div>
       
+      {/* Table with all superhero data and stats */}
       <table>
         <thead>
           <tr>
