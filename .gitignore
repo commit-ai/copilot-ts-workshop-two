@@ -13,3 +13,5 @@ yarn-debug.log*
 yarn-error.log*
 
 test-results/
+.vscode/
+.vscode/mcp.json
