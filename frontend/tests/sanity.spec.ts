@@ -1,8 +1,20 @@
 import { test, expect } from '@playwright/test';
 
-// Basic sanity test for Playwright setup
-test('homepage has superhero content', async ({ page }) => {
-  await page.goto('http://localhost:3001');
-  await expect(page).toHaveTitle(/Superhero/i);
-  await expect(page.locator('body')).toContainText(/superheroes/i);
+test('superheroes table renders with data', async ({ page }) => {
+  await page.goto('/');
+
+  const table = page.locator('table');
+  await expect(table).toBeVisible();
+  await expect(table.locator('thead tr th')).toHaveText([
+    'ID',
+    'Name',
+    'Image',
+    'Intelligence',
+    'Strength',
+    'Speed',
+    'Durability',
+    'Power',
+    'Combat',
+  ]);
+  await expect(table.locator('tbody tr').first()).toBeVisible();
 });

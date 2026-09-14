@@ -8,7 +8,7 @@ export default defineConfig({
 	workers: process.env.CI ? 1 : undefined,
 	reporter: 'html',
 	use: {
-		baseURL: 'http://localhost:3001',
+		baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3001',
 	},
 	outputDir: 'test-results/',
 	testMatch: '**/tests/**/*.@(spec|test).@(ts|js)',
