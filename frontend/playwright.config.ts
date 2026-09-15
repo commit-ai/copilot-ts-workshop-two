@@ -10,6 +10,18 @@ export default defineConfig({
 	use: {
 		baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3001',
 	},
+	webServer: [
+		{
+			command: 'npm run start --workspace backend',
+			url: 'http://localhost:3000/',
+			reuseExistingServer: !process.env.CI,
+		},
+		{
+			command: 'npm run dev --workspace frontend',
+			url: 'http://localhost:3001/',
+			reuseExistingServer: !process.env.CI,
+		},
+	],
 	outputDir: 'test-results/',
 	testMatch: '**/tests/**/*.@(spec|test).@(ts|js)',
 	testIgnore: ['**/src/**', '**/*.test.js', '**/*.test.ts'],
