@@ -18,6 +18,22 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.TEST_PORT || process.env.PORT || 3000;
 
+interface Powerstats {
+  intelligence: number;
+  strength: number;
+  speed: number;
+  durability: number;
+  power: number;
+  combat: number;
+}
+
+interface Superhero {
+  id: number;
+  name: string;
+  image: string;
+  powerstats: Powerstats;
+}
+
 // Root route
 /**
  * GET /
@@ -33,11 +49,11 @@ app.get('/', (req, res) => {
 /**
  * Loads the list of superheroes from a JSON file asynchronously.
  *
- * @returns {Promise<any>} A promise that resolves with the parsed JSON data containing superheroes,
+ * @returns {Promise<Superhero[]>} A promise that resolves with the parsed JSON data containing superheroes,
  * or rejects if there is an error reading or parsing the file.
  * @throws Will reject the promise if the file cannot be read or if the JSON is invalid.
  */
-function loadSuperheroes(): Promise<any> {
+function loadSuperheroes(): Promise<Superhero[]> {
   const dataPath = path.join(__dirname, '../data/superheroes.json');
   return new Promise((resolve, reject) => {
     fs.readFile(dataPath, 'utf8', (err, data) => {
@@ -70,57 +86,6 @@ app.get('/api/superheroes', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
-/**
- * GET /api/superheroes/:id
- * Returns a single superhero by their unique ID.
- *
- * Params: id (string) - The unique identifier of the superhero
- * Response: 200 OK - Superhero object
- *           404 Not Found - If the superhero does not exist
- *           500 Internal Server Error - If data cannot be read
- */
-app.get('/api/superheroes/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const superheroes = await loadSuperheroes();
-    const superhero = superheroes.find((hero: any) => String(hero.id) === String(id));
-    if (superhero) {
-      res.json(superhero);
-    } else {
-      res.status(404).send('Superhero not found');
-    }
-  } catch (err) {
-    console.error('Error loading superheroes data:', err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-/**
- * GET /api/superheroes/:id/powerstats
- * Returns the powerstats for a superhero by their unique ID.
- *
- * Params: id (string) - The unique identifier of the superhero
- * Response: 200 OK - Powerstats object
- *           404 Not Found - If the superhero does not exist
- *           500 Internal Server Error - If data cannot be read
- */
-app.get('/api/superheroes/:id/powerstats', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const superheroes = await loadSuperheroes();
-    const superhero = superheroes.find((hero: any) => String(hero.id) === String(id));
-    if (superhero) {
-      res.json(superhero.powerstats);
-    } else {
-      res.status(404).send('Superhero not found');
-    }
-  } catch (err) {
-    console.error('Error loading superheroes data:', err);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
 // Start the server only if not in test environment
 if (process.env.NODE_ENV !== 'test') {
   try {
