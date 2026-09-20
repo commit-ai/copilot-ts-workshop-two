@@ -94,15 +94,15 @@ function App() {
 
                     return (
                       <tr key={comparison.key}>
-                        <td className={firstHeroWon ? 'stat-winner' : ''}>
+                        <td data-label={firstHero.name} className={firstHeroWon ? 'stat-winner' : ''}>
                           {comparison.firstValue}
                           {firstHeroWon && <span className="winner-indicator">Wins</span>}
                         </td>
-                        <th scope="row">
+                        <th scope="row" data-label="Category">
                           {comparison.label}
                           {isDraw && <span className="draw-indicator">Draw</span>}
                         </th>
-                        <td className={secondHeroWon ? 'stat-winner' : ''}>
+                        <td data-label={secondHero.name} className={secondHeroWon ? 'stat-winner' : ''}>
                           {secondHeroWon && <span className="winner-indicator">Wins</span>}
                           {comparison.secondValue}
                         </td>
@@ -121,7 +121,6 @@ function App() {
           </section>
         ) : (
           <>
-<<<<<<< HEAD
             <div className="selection-controls">
               <p className="selection-summary" aria-live="polite">
                 Selected: {selectedHeroes.length > 0
@@ -150,52 +149,6 @@ function App() {
                     <th scope="col">Durability</th>
                     <th scope="col">Power</th>
                     <th scope="col">Combat</th>
-=======
-            <button
-              type="button"
-              disabled={selectedHeroIds.length !== 2}
-              onClick={() => setIsComparing(true)}
-            >
-              Compare selected heroes
-            </button>
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Image</th>
-                  <th>Intelligence</th>
-                  <th>Strength</th>
-                  <th>Speed</th>
-                  <th>Durability</th>
-                  <th>Power</th>
-                  <th>Combat</th>
-                </tr>
-              </thead>
-              <tbody>
-                {superheroes.map((hero) => (
-                  <tr
-                    key={hero.id}
-                    className={selectedHeroIds.includes(hero.id) ? 'selected-hero' : ''}
-                    onClick={() => toggleHeroSelection(hero.id)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        toggleHeroSelection(hero.id);
-                      }
-                    }}
-                    tabIndex={0}
-                  >
-                    <td data-label="ID">{hero.id}</td>
-                    <td data-label="Name">{hero.name}</td>
-                    <td data-label="Image"><img src={`/assets/${hero.image}`} alt={hero.name} width="50" /></td>
-                    <td data-label="Intelligence">{hero.powerstats.intelligence}</td>
-                    <td data-label="Strength">{hero.powerstats.strength}</td>
-                    <td data-label="Speed">{hero.powerstats.speed}</td>
-                    <td data-label="Durability">{hero.powerstats.durability}</td>
-                    <td data-label="Power">{hero.powerstats.power}</td>
-                    <td data-label="Combat">{hero.powerstats.combat}</td>
->>>>>>> 2e3df61 (Task 4 (part 1))
                   </tr>
                 </thead>
                 <tbody>
@@ -204,10 +157,10 @@ function App() {
 
                     return (
                       <tr key={hero.id} className={isSelected ? 'selected-hero' : ''}>
-                        <td>{hero.id}</td>
-                        <td>{hero.name}</td>
-                        <td><img src={`/assets/${hero.image}`} alt={hero.name} width="50" /></td>
-                        <td className="select-cell">
+                        <td data-label="ID">{hero.id}</td>
+                        <td data-label="Name">{hero.name}</td>
+                        <td data-label="Image"><img src={`/assets/${hero.image}`} alt={hero.name} width="50" /></td>
+                        <td className="select-cell" data-label="Select">
                           <input
                             type="checkbox"
                             aria-label={`Select ${hero.name}`}
@@ -216,12 +169,12 @@ function App() {
                             onChange={() => toggleHeroSelection(hero.id)}
                           />
                         </td>
-                        <td>{hero.powerstats.intelligence}</td>
-                        <td>{hero.powerstats.strength}</td>
-                        <td>{hero.powerstats.speed}</td>
-                        <td>{hero.powerstats.durability}</td>
-                        <td>{hero.powerstats.power}</td>
-                        <td>{hero.powerstats.combat}</td>
+                        <td data-label="Intelligence">{hero.powerstats.intelligence}</td>
+                        <td data-label="Strength">{hero.powerstats.strength}</td>
+                        <td data-label="Speed">{hero.powerstats.speed}</td>
+                        <td data-label="Durability">{hero.powerstats.durability}</td>
+                        <td data-label="Power">{hero.powerstats.power}</td>
+                        <td data-label="Combat">{hero.powerstats.combat}</td>
                       </tr>
                     );
                   })}

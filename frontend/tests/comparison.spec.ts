@@ -5,6 +5,33 @@ async function selectHeroes(page, firstHeroName, secondHeroName) {
   await page.getByRole('checkbox', { name: `Select ${secondHeroName}` }).check();
 }
 
+test('shows compact comparison records without horizontal overflow on narrow screens', async ({ page }) => {
+  const compactBreakpoint = 640;
+
+  for (const width of [375, 619, compactBreakpoint, compactBreakpoint + 1]) {
+    await page.setViewportSize({ width, height: 812 });
+    await page.goto('/');
+    await selectHeroes(page, 'A-Bomb', 'Ant-Man');
+    await page.getByRole('button', { name: 'Compare selected heroes' }).click();
+
+    const comparisonTable = page.locator('.comparison-table');
+    await expect(comparisonTable).toBeVisible();
+
+    if (width <= compactBreakpoint) {
+      await expect(comparisonTable.locator('thead')).toBeHidden();
+      await expect(comparisonTable.locator('tbody tr').first().locator('td').first())
+        .toHaveAttribute('data-label', 'A-Bomb');
+      await expect(comparisonTable.locator('tbody tr').first().locator('td').nth(1))
+        .toHaveAttribute('data-label', 'Ant-Man');
+    } else {
+      await expect(comparisonTable.locator('thead')).toBeVisible();
+    }
+
+    const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+    expect(documentWidth).toBeLessThanOrEqual(width);
+  }
+});
+
 test('limits selection to two heroes, compares their categories, and returns to the table', async ({ page }) => {
   await page.goto('/');
 
