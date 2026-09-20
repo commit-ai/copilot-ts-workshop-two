@@ -83,15 +83,15 @@ function App() {
                     }}
                     tabIndex={0}
                   >
-                    <td>{hero.id}</td>
-                    <td>{hero.name}</td>
-                    <td><img src={`/assets/${hero.image}`} alt={hero.name} width="50" /></td>
-                    <td>{hero.powerstats.intelligence}</td>
-                    <td>{hero.powerstats.strength}</td>
-                    <td>{hero.powerstats.speed}</td>
-                    <td>{hero.powerstats.durability}</td>
-                    <td>{hero.powerstats.power}</td>
-                    <td>{hero.powerstats.combat}</td>
+                    <td data-label="ID">{hero.id}</td>
+                    <td data-label="Name">{hero.name}</td>
+                    <td data-label="Image"><img src={`/assets/${hero.image}`} alt={hero.name} width="50" /></td>
+                    <td data-label="Intelligence">{hero.powerstats.intelligence}</td>
+                    <td data-label="Strength">{hero.powerstats.strength}</td>
+                    <td data-label="Speed">{hero.powerstats.speed}</td>
+                    <td data-label="Durability">{hero.powerstats.durability}</td>
+                    <td data-label="Power">{hero.powerstats.power}</td>
+                    <td data-label="Combat">{hero.powerstats.combat}</td>
                   </tr>
                 ))}
               </tbody>

@@ -35,3 +35,63 @@ tbody tr {
 tbody tr.selected-hero {
   background-color: #3b4a64;
 }
+
+@media (max-width: 820px) {
+  .App-header {
+    padding: 16px;
+  }
+
+  table {
+    background-color: transparent;
+    display: block;
+    margin: 16px 0;
+    width: 100%;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody {
+    display: grid;
+    gap: 12px;
+  }
+
+  tbody tr {
+    background-color: #282c34;
+    border: 1px solid #444;
+    display: grid;
+    padding: 4px 0;
+  }
+
+  tbody tr.selected-hero {
+    background-color: #3b4a64;
+  }
+
+  td {
+    align-items: center;
+    border: 0;
+    border-bottom: 1px solid #444;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    min-height: 34px;
+    padding: 8px 12px;
+    text-align: right;
+  }
+
+  td:last-child {
+    border-bottom: 0;
+  }
+
+  td::before {
+    color: #b8c3d6;
+    content: attr(data-label);
+    font-weight: 700;
+    text-align: left;
+  }
+
+  td img {
+    display: block;
+  }
+}
