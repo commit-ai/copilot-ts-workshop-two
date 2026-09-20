@@ -215,14 +215,22 @@ function App() {
                     </tr>
                   </thead>
                   <tbody>
-                    {activity.map((entry) => (
-                      <tr key={entry.id}>
-                        <td>{entry.method}</td>
-                        <td>{entry.path}</td>
-                        <td>{entry.status}</td>
-                        <td>{new Date(entry.timestamp).toLocaleString()}</td>
-                      </tr>
-                    ))}
+                      {activity.length === 0 ? (
+                        <tr>
+                          <td colSpan="4">
+                            {activityPath ? 'No activity matches this filter.' : 'No activity has been recorded yet.'}
+                          </td>
+                        </tr>
+                      ) : (
+                        activity.map((entry) => (
+                          <tr key={entry.id}>
+                            <td>{entry.method}</td>
+                            <td>{entry.path}</td>
+                            <td>{entry.status}</td>
+                            <td>{new Date(entry.timestamp).toLocaleString()}</td>
+                          </tr>
+                        ))
+                      )}
                   </tbody>
                 </table>
               </div>

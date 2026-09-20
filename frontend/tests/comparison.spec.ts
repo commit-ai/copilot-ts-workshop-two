@@ -74,7 +74,7 @@ test('limits selection to two heroes, compares their categories, and returns to 
 
   await page.getByRole('button', { name: 'Back to table' }).click();
   await expect(page.getByRole('heading', { name: 'Hero comparison' })).not.toBeVisible();
-  await expect(page.locator('table')).toBeVisible();
+  await expect(page.locator('.table-wrapper table')).toBeVisible();
   await expect(aBombCheckbox).toBeChecked();
   await expect(antManCheckbox).toBeChecked();
   await expect(compareButton).toBeEnabled();
