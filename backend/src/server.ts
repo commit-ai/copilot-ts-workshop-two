@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
+import { randomUUID } from 'crypto';
 import { fileURLToPath } from 'url';
 
 /**
@@ -34,6 +35,35 @@ interface Superhero {
   powerstats: Powerstats;
 }
 
+interface ActivityEntry {
+  id: string;
+  method: string;
+  path: string;
+  timestamp: string;
+  status: number;
+}
+
+const activityLog: ActivityEntry[] = [];
+
+app.use((req, res, next) => {
+  if (req.path === '/api/activity') {
+    next();
+    return;
+  }
+
+  res.on('finish', () => {
+    activityLog.push({
+      id: randomUUID(),
+      method: req.method,
+      path: req.path,
+      timestamp: new Date().toISOString(),
+      status: res.statusCode,
+    });
+  });
+
+  next();
+});
+
 // Root route
 /**
  * GET /
@@ -43,6 +73,21 @@ interface Superhero {
  */
 app.get('/', (req, res) => {
   res.send('Save the World!');
+});
+
+/**
+ * GET /api/activity
+ * Returns completed requests, optionally filtered by a path substring.
+ *
+ * Response: 200 OK - Array of activity entries
+ */
+app.get('/api/activity', (req, res) => {
+  const pathQuery = typeof req.query.path === 'string' ? req.query.path : '';
+  const entries = pathQuery
+    ? activityLog.filter((entry) => entry.path.includes(pathQuery))
+    : activityLog;
+
+  res.json(entries);
 });
 
 // API route to fetch superheroes data

@@ -78,6 +78,42 @@ button:disabled {
   width: 100%;
 }
 
+.activity-log {
+  margin-top: 32px;
+  max-width: 1080px;
+  width: 100%;
+}
+
+.activity-log h2 {
+  margin-bottom: 16px;
+}
+
+.activity-log label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.activity-log input {
+  box-sizing: border-box;
+  font: inherit;
+  margin-bottom: 16px;
+  max-width: 400px;
+  padding: 8px 12px;
+  width: 100%;
+}
+
+.activity-table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.activity-table-wrapper table {
+  min-width: 620px;
+  width: 100%;
+}
+
 table {
   background-color: #282c34;
   border-collapse: collapse;

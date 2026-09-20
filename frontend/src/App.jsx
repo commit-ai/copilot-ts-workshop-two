@@ -12,6 +12,8 @@ const POWERSTAT_CATEGORIES = [
 
 function App() {
   const [superheroes, setSuperheroes] = useState([]);
+  const [activity, setActivity] = useState([]);
+  const [activityPath, setActivityPath] = useState('');
   const [selectedHeroIds, setSelectedHeroIds] = useState([]);
   const [isComparing, setIsComparing] = useState(false);
 
@@ -21,6 +23,15 @@ function App() {
       .then(setSuperheroes)
       .catch((error) => console.error('Error fetching superheroes:', error));
   }, []);
+
+  useEffect(() => {
+    const query = activityPath ? `?path=${encodeURIComponent(activityPath)}` : '';
+
+    fetch(`/api/activity${query}`)
+      .then((response) => response.json())
+      .then(setActivity)
+      .catch((error) => console.error('Error fetching activity:', error));
+  }, [activityPath]);
 
   const selectedHeroes = superheroes.filter((hero) => selectedHeroIds.includes(hero.id));
   const [firstHero, secondHero] = selectedHeroes;
@@ -181,6 +192,41 @@ function App() {
                 </tbody>
               </table>
             </div>
+            <section className="activity-log" aria-labelledby="activity-log-heading">
+              <h2 id="activity-log-heading">Activity Log</h2>
+              <label htmlFor="activity-path-filter">
+                Filter by path
+              </label>
+              <input
+                id="activity-path-filter"
+                type="text"
+                value={activityPath}
+                onChange={(event) => setActivityPath(event.target.value)}
+                placeholder="/api/superheroes"
+              />
+              <div className="activity-table-wrapper">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col">Method</th>
+                      <th scope="col">Path</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {activity.map((entry) => (
+                      <tr key={entry.id}>
+                        <td>{entry.method}</td>
+                        <td>{entry.path}</td>
+                        <td>{entry.status}</td>
+                        <td>{new Date(entry.timestamp).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
           </>
         )}
       </header>

@@ -57,6 +57,47 @@ describe('GET /api/superheroes/:id/powerstats', () => {
     });
   });
 
+  describe('GET /api/activity', () => {
+    it('returns completed non-activity requests and excludes itself', async () => {
+      await request(app).get('/api/superheroes');
+
+      const firstActivityResponse = await request(app).get('/api/activity');
+      const secondActivityResponse = await request(app).get('/api/activity');
+
+      expect(firstActivityResponse.status).toBe(200);
+      expect(Array.isArray(firstActivityResponse.body)).toBe(true);
+      expect(secondActivityResponse.body).toHaveLength(firstActivityResponse.body.length);
+
+      const superheroRequest = firstActivityResponse.body.find(
+        (entry: { path: string }) => entry.path === '/api/superheroes',
+      );
+      expect(superheroRequest).toEqual(expect.objectContaining({
+        id: expect.any(String),
+        method: 'GET',
+        path: '/api/superheroes',
+        timestamp: expect.any(String),
+        status: 200,
+      }));
+      expect(Number.isNaN(Date.parse(superheroRequest.timestamp))).toBe(false);
+    });
+
+    it('filters requests by path substring', async () => {
+      await request(app).get('/api/superheroes');
+      await request(app).get('/');
+
+      const response = await request(app).get('/api/activity?path=/api/superheroes');
+
+      expect(response.status).toBe(200);
+      expect(response.body).not.toHaveLength(0);
+      expect(response.body).toEqual(expect.arrayContaining([
+        expect.objectContaining({ path: '/api/superheroes' }),
+      ]));
+      expect(response.body.every((entry: { path: string }) => (
+        entry.path.includes('/api/superheroes')
+      ))).toBe(true);
+    });
+  });
+
   it('should return 404 for a superhero id that does not exist', async () => {
     const response = await request(app).get('/api/superheroes/999999/powerstats');
     expect(response.status).toBe(404);
