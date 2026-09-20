@@ -23,8 +23,8 @@ export default defineConfig({
 		},
 	],
 	outputDir: 'test-results/',
-	testMatch: '**/tests/**/*.@(spec|test).@(ts|js)',
-	testIgnore: ['**/src/**', '**/*.test.js', '**/*.test.ts'],
+	testMatch: '**/*.spec.ts',
+	testIgnore: ['**/*.test.js', '**/*.test.ts'],
 	projects: [
 		{
 			name: 'chromium',
