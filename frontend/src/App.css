@@ -1,4 +1,5 @@
 .App {
+  min-height: 100vh;
   text-align: center;
 }
 
@@ -8,18 +9,85 @@
   color: white;
   display: flex;
   flex-direction: column;
-  font-size: calc(10px + 1vmin);
+  font-size: 16px;
   min-height: 100vh;
-  padding: 20px;
+  padding: 32px 20px;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 24px;
+}
+
+.selection-controls {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  max-width: 1080px;
+  width: 100%;
+}
+
+.selection-summary {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+button {
+  background-color: #f2c45c;
+  border: 1px solid #f8d982;
+  border-radius: 4px;
+  color: #1c2129;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 10px 16px;
+}
+
+button:hover:not(:disabled) {
+  background-color: #ffe096;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #8dd9ca;
+  outline-offset: 3px;
+}
+
+button:disabled {
+  background-color: #626873;
+  border-color: #626873;
+  color: #d2d5da;
+  cursor: not-allowed;
+}
+
+.table-wrapper,
+.comparison-table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.table-wrapper {
+  margin-top: 16px;
+  width: 100%;
 }
 
 table {
   background-color: #282c34;
   border-collapse: collapse;
   border-radius: 8px;
-  margin: 20px;
+  margin: 0 auto;
   overflow: hidden;
-  user-select: none;
+}
+
+.table-wrapper table {
+  min-width: 950px;
 }
 
 th,
@@ -28,10 +96,184 @@ td {
   padding: 12px;
 }
 
+thead th {
+  background-color: #343a45;
+  font-weight: 700;
+}
+
 tbody tr {
-  cursor: pointer;
+  transition: background-color 160ms ease;
 }
 
 tbody tr.selected-hero {
   background-color: #3b4a64;
+}
+
+.select-cell {
+  text-align: center;
+}
+
+.select-cell input {
+  accent-color: #77cbb9;
+  block-size: 18px;
+  cursor: pointer;
+  inline-size: 18px;
+}
+
+.select-cell input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.comparison {
+  max-width: 760px;
+  width: 100%;
+}
+
+.comparison h2 {
+  margin-bottom: 24px;
+}
+
+.comparison-heroes {
+  align-items: center;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  margin-bottom: 24px;
+}
+
+.comparison-hero {
+  min-width: 0;
+}
+
+.comparison-hero img {
+  block-size: 96px;
+  border: 2px solid #6b7380;
+  inline-size: 96px;
+  object-fit: cover;
+}
+
+.comparison-hero h3 {
+  margin: 8px 0 4px;
+  overflow-wrap: anywhere;
+}
+
+.comparison-hero p {
+  color: #cdd3da;
+  margin-bottom: 0;
+}
+
+.versus {
+  color: #f2c45c;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.comparison-table-wrapper {
+  margin-bottom: 20px;
+}
+
+.comparison-table {
+  min-width: 520px;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.comparison-table caption {
+  caption-side: top;
+  font-size: 18px;
+  font-weight: 700;
+  padding-bottom: 12px;
+}
+
+.comparison-table th,
+.comparison-table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.comparison-table tbody th {
+  background-color: #343a45;
+}
+
+.stat-winner {
+  background-color: #315f59;
+  color: #b9f2df;
+  font-weight: 700;
+}
+
+.winner-indicator,
+.draw-indicator {
+  border-radius: 3px;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 0 6px;
+  padding: 2px 5px;
+}
+
+.winner-indicator {
+  background-color: #7ed3bd;
+  color: #173d37;
+}
+
+.draw-indicator {
+  background-color: #6b7380;
+  color: #fff;
+}
+
+.comparison-result {
+  color: #f2c45c;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 640px) {
+  .App-header {
+    padding: 24px 16px;
+  }
+
+  .selection-controls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .selection-summary {
+    text-align: center;
+  }
+
+  .comparison-heroes {
+    gap: 12px;
+  }
+
+  .comparison-hero img {
+    block-size: 72px;
+    inline-size: 72px;
+  }
+
+  .comparison-hero h3 {
+    font-size: 16px;
+  }
+
+  .comparison-table {
+    min-width: 0;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 8px 4px;
+  }
+
+  .comparison-table thead th {
+    overflow-wrap: anywhere;
+  }
+
+  .winner-indicator,
+  .draw-indicator {
+    display: block;
+    margin: 4px auto 0;
+    width: fit-content;
+  }
 }

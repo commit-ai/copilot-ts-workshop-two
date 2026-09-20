@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 
+const POWERSTAT_CATEGORIES = [
+  { key: 'intelligence', label: 'Intelligence' },
+  { key: 'strength', label: 'Strength' },
+  { key: 'speed', label: 'Speed' },
+  { key: 'durability', label: 'Durability' },
+  { key: 'power', label: 'Power' },
+  { key: 'combat', label: 'Combat' },
+];
+
 function App() {
   const [superheroes, setSuperheroes] = useState([]);
   const [selectedHeroIds, setSelectedHeroIds] = useState([]);
@@ -14,21 +23,37 @@ function App() {
   }, []);
 
   const selectedHeroes = superheroes.filter((hero) => selectedHeroIds.includes(hero.id));
-  const scores = selectedHeroes.map((hero) => ({
-    hero,
-    total: Object.values(hero.powerstats).reduce((sum, stat) => sum + stat, 0),
-  }));
-  const isTie = scores.length === 2 && scores[0].total === scores[1].total;
-  const winner = isTie ? null : scores.reduce((leadingScore, score) => (
-    score.total > leadingScore.total ? score : leadingScore
-  ), scores[0]);
+  const [firstHero, secondHero] = selectedHeroes;
+  const comparisons = firstHero && secondHero
+    ? POWERSTAT_CATEGORIES.map((category) => {
+      const firstValue = firstHero.powerstats[category.key];
+      const secondValue = secondHero.powerstats[category.key];
+      const winnerId = firstValue === secondValue
+        ? null
+        : firstValue > secondValue ? firstHero.id : secondHero.id;
+
+      return {
+        ...category,
+        firstValue,
+        secondValue,
+        winnerId,
+      };
+    })
+    : [];
+  const firstHeroWins = comparisons.filter((comparison) => comparison.winnerId === firstHero?.id).length;
+  const secondHeroWins = comparisons.filter((comparison) => comparison.winnerId === secondHero?.id).length;
+  const overallWinner = firstHeroWins === secondHeroWins
+    ? null
+    : firstHeroWins > secondHeroWins ? firstHero : secondHero;
 
   function toggleHeroSelection(heroId) {
-    setSelectedHeroIds((currentIds) => (
-      currentIds.includes(heroId)
-        ? currentIds.filter((id) => id !== heroId)
-        : [...currentIds, heroId]
-    ));
+    setSelectedHeroIds((currentIds) => {
+      if (currentIds.includes(heroId)) {
+        return currentIds.filter((id) => id !== heroId);
+      }
+
+      return currentIds.length === 2 ? currentIds : [...currentIds, heroId];
+    });
   }
 
   return (
@@ -36,11 +61,59 @@ function App() {
       <header className="App-header">
         <h1>Superheroes</h1>
         {isComparing ? (
-          <section aria-labelledby="comparison-heading">
+          <section className="comparison" aria-labelledby="comparison-heading">
             <h2 id="comparison-heading">Hero comparison</h2>
-            <p>{selectedHeroes.map((hero) => hero.name).join(' vs ')}</p>
-            <p role="status">
-              {isTie ? 'Tie!' : `${winner.hero.name} wins!`}
+            <div className="comparison-heroes">
+              <article className="comparison-hero">
+                <img src={`/assets/${firstHero.image}`} alt={firstHero.name} />
+                <h3>{firstHero.name}</h3>
+                <p>{firstHeroWins} category wins</p>
+              </article>
+              <p className="versus" aria-label={`${firstHero.name} versus ${secondHero.name}`}>VS</p>
+              <article className="comparison-hero">
+                <img src={`/assets/${secondHero.image}`} alt={secondHero.name} />
+                <h3>{secondHero.name}</h3>
+                <p>{secondHeroWins} category wins</p>
+              </article>
+            </div>
+            <div className="comparison-table-wrapper">
+              <table className="comparison-table">
+                <caption>Powerstats comparison</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">{firstHero.name}</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">{secondHero.name}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparisons.map((comparison) => {
+                    const isDraw = comparison.winnerId === null;
+                    const firstHeroWon = comparison.winnerId === firstHero.id;
+                    const secondHeroWon = comparison.winnerId === secondHero.id;
+
+                    return (
+                      <tr key={comparison.key}>
+                        <td className={firstHeroWon ? 'stat-winner' : ''}>
+                          {comparison.firstValue}
+                          {firstHeroWon && <span className="winner-indicator">Wins</span>}
+                        </td>
+                        <th scope="row">
+                          {comparison.label}
+                          {isDraw && <span className="draw-indicator">Draw</span>}
+                        </th>
+                        <td className={secondHeroWon ? 'stat-winner' : ''}>
+                          {secondHeroWon && <span className="winner-indicator">Wins</span>}
+                          {comparison.secondValue}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <p className="comparison-result" role="status">
+              {overallWinner ? `${overallWinner.name} wins!` : "It's a tie!"}
             </p>
             <button type="button" onClick={() => setIsComparing(false)}>
               Back to table
@@ -48,54 +121,66 @@ function App() {
           </section>
         ) : (
           <>
-            <button
-              type="button"
-              disabled={selectedHeroIds.length !== 2}
-              onClick={() => setIsComparing(true)}
-            >
-              Compare selected heroes
-            </button>
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Image</th>
-                  <th>Intelligence</th>
-                  <th>Strength</th>
-                  <th>Speed</th>
-                  <th>Durability</th>
-                  <th>Power</th>
-                  <th>Combat</th>
-                </tr>
-              </thead>
-              <tbody>
-                {superheroes.map((hero) => (
-                  <tr
-                    key={hero.id}
-                    className={selectedHeroIds.includes(hero.id) ? 'selected-hero' : ''}
-                    onClick={() => toggleHeroSelection(hero.id)}
-                    onKeyDown={(event) => {
-                      if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        toggleHeroSelection(hero.id);
-                      }
-                    }}
-                    tabIndex={0}
-                  >
-                    <td>{hero.id}</td>
-                    <td>{hero.name}</td>
-                    <td><img src={`/assets/${hero.image}`} alt={hero.name} width="50" /></td>
-                    <td>{hero.powerstats.intelligence}</td>
-                    <td>{hero.powerstats.strength}</td>
-                    <td>{hero.powerstats.speed}</td>
-                    <td>{hero.powerstats.durability}</td>
-                    <td>{hero.powerstats.power}</td>
-                    <td>{hero.powerstats.combat}</td>
+            <div className="selection-controls">
+              <p className="selection-summary" aria-live="polite">
+                Selected: {selectedHeroes.length > 0
+                  ? selectedHeroes.map((hero) => hero.name).join(' vs ')
+                  : 'Choose two heroes'}
+              </p>
+              <button
+                type="button"
+                disabled={selectedHeroIds.length !== 2}
+                onClick={() => setIsComparing(true)}
+              >
+                Compare selected heroes
+              </button>
+            </div>
+            <div className="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Select</th>
+                    <th scope="col">Intelligence</th>
+                    <th scope="col">Strength</th>
+                    <th scope="col">Speed</th>
+                    <th scope="col">Durability</th>
+                    <th scope="col">Power</th>
+                    <th scope="col">Combat</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {superheroes.map((hero) => {
+                    const isSelected = selectedHeroIds.includes(hero.id);
+
+                    return (
+                      <tr key={hero.id} className={isSelected ? 'selected-hero' : ''}>
+                        <td>{hero.id}</td>
+                        <td>{hero.name}</td>
+                        <td><img src={`/assets/${hero.image}`} alt={hero.name} width="50" /></td>
+                        <td className="select-cell">
+                          <input
+                            type="checkbox"
+                            aria-label={`Select ${hero.name}`}
+                            checked={isSelected}
+                            disabled={!isSelected && selectedHeroIds.length === 2}
+                            onChange={() => toggleHeroSelection(hero.id)}
+                          />
+                        </td>
+                        <td>{hero.powerstats.intelligence}</td>
+                        <td>{hero.powerstats.strength}</td>
+                        <td>{hero.powerstats.speed}</td>
+                        <td>{hero.powerstats.durability}</td>
+                        <td>{hero.powerstats.power}</td>
+                        <td>{hero.powerstats.combat}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </>
         )}
       </header>

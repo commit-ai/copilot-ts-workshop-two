@@ -9,6 +9,7 @@ test('superheroes table renders with data', async ({ page }) => {
     'ID',
     'Name',
     'Image',
+    'Select',
     'Intelligence',
     'Strength',
     'Speed',
