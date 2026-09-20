@@ -6,9 +6,9 @@ import { fileURLToPath } from 'url';
 /**
 This is a superheroes API server that supports 3 GET endpoints
 The data is stored in a JSON file in the project folder called superheroes.json
-1. /superheroes/all - returns a list of all superheroes, as a JSON array
-2. /superheroes/:id - returns a specific superhero by id, as a JSON object
-3. /superheroes/:id/powerstats - returns a the powers statistics for superhero by id, as a JSON object
+1. /api/superheroes - returns a list of all superheroes, as a JSON array
+2. /api/superheroes/:id - returns a specific superhero by id, as a JSON object
+3. /api/superheroes/:id/powerstats - returns the powers statistics for superhero by id, as a JSON object
 */
 
 // Get proper __dirname equivalent in ESM
@@ -81,6 +81,52 @@ app.get('/api/superheroes', async (req, res) => {
   try {
     const superheroes = await loadSuperheroes();
     res.json(superheroes);
+  } catch (err) {
+    console.error('Error loading superheroes data:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+/**
+ * GET /api/superheroes/:id
+ * Returns a single superhero by id.
+ *
+ * Response: 200 OK - Superhero object
+ *           404 Not Found - If no superhero matches the id
+ *           500 Internal Server Error - If data cannot be read
+ */
+app.get('/api/superheroes/:id', async (req, res) => {
+  try {
+    const superheroes = await loadSuperheroes();
+    const hero = superheroes.find((h) => h.id === Number(req.params.id));
+    if (!hero) {
+      res.status(404).send('Superhero not found');
+      return;
+    }
+    res.json(hero);
+  } catch (err) {
+    console.error('Error loading superheroes data:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+/**
+ * GET /api/superheroes/:id/powerstats
+ * Returns the powerstats for a single superhero by id.
+ *
+ * Response: 200 OK - Powerstats object
+ *           404 Not Found - If no superhero matches the id
+ *           500 Internal Server Error - If data cannot be read
+ */
+app.get('/api/superheroes/:id/powerstats', async (req, res) => {
+  try {
+    const superheroes = await loadSuperheroes();
+    const hero = superheroes.find((h) => h.id === Number(req.params.id));
+    if (!hero) {
+      res.status(404).send('Superhero not found');
+      return;
+    }
+    res.json(hero.powerstats);
   } catch (err) {
     console.error('Error loading superheroes data:', err);
     res.status(500).send('Internal Server Error');

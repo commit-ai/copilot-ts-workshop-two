@@ -27,3 +27,38 @@ describe('GET /api/superheroes', () => {
     });
   });
 });
+
+describe('GET /api/superheroes/:id', () => {
+  it('should return the superhero matching the given id', async () => {
+    const response = await request(app).get('/api/superheroes/1');
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchObject({ id: 1, name: 'A-Bomb' });
+    expect(response.body).toHaveProperty('image');
+    expect(response.body).toHaveProperty('powerstats');
+  });
+
+  it('should return 404 for a superhero id that does not exist', async () => {
+    const response = await request(app).get('/api/superheroes/999999');
+    expect(response.status).toBe(404);
+  });
+});
+
+describe('GET /api/superheroes/:id/powerstats', () => {
+  it('should return the powerstats for the superhero matching the given id', async () => {
+    const response = await request(app).get('/api/superheroes/1/powerstats');
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      intelligence: 38,
+      strength: 100,
+      speed: 17,
+      durability: 80,
+      power: 24,
+      combat: 64,
+    });
+  });
+
+  it('should return 404 for a superhero id that does not exist', async () => {
+    const response = await request(app).get('/api/superheroes/999999/powerstats');
+    expect(response.status).toBe(404);
+  });
+});
