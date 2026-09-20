@@ -121,6 +121,7 @@ function App() {
           </section>
         ) : (
           <>
+<<<<<<< HEAD
             <div className="selection-controls">
               <p className="selection-summary" aria-live="polite">
                 Selected: {selectedHeroes.length > 0
@@ -149,6 +150,52 @@ function App() {
                     <th scope="col">Durability</th>
                     <th scope="col">Power</th>
                     <th scope="col">Combat</th>
+=======
+            <button
+              type="button"
+              disabled={selectedHeroIds.length !== 2}
+              onClick={() => setIsComparing(true)}
+            >
+              Compare selected heroes
+            </button>
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Image</th>
+                  <th>Intelligence</th>
+                  <th>Strength</th>
+                  <th>Speed</th>
+                  <th>Durability</th>
+                  <th>Power</th>
+                  <th>Combat</th>
+                </tr>
+              </thead>
+              <tbody>
+                {superheroes.map((hero) => (
+                  <tr
+                    key={hero.id}
+                    className={selectedHeroIds.includes(hero.id) ? 'selected-hero' : ''}
+                    onClick={() => toggleHeroSelection(hero.id)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        toggleHeroSelection(hero.id);
+                      }
+                    }}
+                    tabIndex={0}
+                  >
+                    <td data-label="ID">{hero.id}</td>
+                    <td data-label="Name">{hero.name}</td>
+                    <td data-label="Image"><img src={`/assets/${hero.image}`} alt={hero.name} width="50" /></td>
+                    <td data-label="Intelligence">{hero.powerstats.intelligence}</td>
+                    <td data-label="Strength">{hero.powerstats.strength}</td>
+                    <td data-label="Speed">{hero.powerstats.speed}</td>
+                    <td data-label="Durability">{hero.powerstats.durability}</td>
+                    <td data-label="Power">{hero.powerstats.power}</td>
+                    <td data-label="Combat">{hero.powerstats.combat}</td>
+>>>>>>> 2e3df61 (Task 4 (part 1))
                   </tr>
                 </thead>
                 <tbody>
