@@ -3,13 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 
-/**
-This is a superheroes API server that supports 3 GET endpoints
-The data is stored in a JSON file in the project folder called superheroes.json
-1. /superheroes/all - returns a list of all superheroes, as a JSON array
-2. /superheroes/:id - returns a specific superhero by id, as a JSON object
-3. /superheroes/:id/powerstats - returns a the powers statistics for superhero by id, as a JSON object
-*/
+
 
 // Get proper __dirname equivalent in ESM
 const __filename = fileURLToPath(import.meta.url);
